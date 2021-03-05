@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Chatアプリ</title>
+<script src="https://www.gstatic.com/firebasejs/4.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase-auth.js"></script>
+
+<script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous">
+<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.css" />
+<link rel="stylesheet" href="style.css">
+<script>
+var config = {
+  apiKey:"<API_KEY>",
+  authDomain:"<PROJECT_ID>.firebaseapp.com"
+};
+firebase.initializeApp(config);
+
+var ui = new firebaseui.auth.AuthUI(firebase.auth());
+  const uiConfig = {
+  callbacks: {
+    signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+      return true;
+    },
+  },
+  signInFlow: 'popup',
+  signInSuccessUrl: 'file:///Users/keigo/Downloads/js03_haifu/js03/index.html',
+  signInOptions: [
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+  ],
+  tosUrl: 'index.html',
+  };
+
+  ui.start('#auth', uiConfig);
+
+</script>
+</head>
+<body>
+
+<!-- コンテンツ表示画面 -->
+<div id="auth"></div>
+<div class="line">
+  <div class="yourname">
+    <label class="ef">
+      <input type="text" id="uname" placeholder="Your name"></div>
+    </label>
+  <div id="output" style="overflow: scroll; height: 500px;" class="output">
+    <div class="message_user1 message_user">
+      <p class="name">User1</p>
+      <div class="message_wrapper">
+        <p class="time">20:00</p>
+        <p class="message">ダミー</p>
+      </div>
+    </div>
+    <div class="message_user2">
+      <p class="name">User2</p><div class="message_wrapper"><p class="message">ダミー</p><p class="time">20:00</p></div>
+    </div>
+
+  </div>
+  <div class="input">
+    <textarea id="text" class="text"></textarea>
+    <button id="send" class="send"><i class="fas fa-paper-plane"></i></button>
+  </div>
+  <div class="user_choice">
+    <input type="radio" id="user1" value="user1" name="person" checked="checked">
+    <label for="user1">User1</label>
+    <input type="radio" id="user2" value="user2" name="person">
+    <label for="user2">User2</label>
+  </div>
+</div>
+<!--/ コンテンツ表示画面 -->
+
+
+
+<!-- JQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- JQuery -->
+
+
+<!--** 以下Firebase **-->
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.2.9/firebase.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+https://firebase.google.com/docs/web/setup#available-libraries -->
+
+<script>
+
+    function scrollToEnd() {
+    const messagesArea = document.getElementById('output');
+    messagesArea.scrollTop = messagesArea.scrollHeight;
+}
+  let date = new Date();
+  let hour = date.getHours();
+  let minutes = date.getMinutes();
+  if (hour < 10) {
+    hour = `0` + hour
+  }
+  if (minutes < 10) {
+    minutes = `0` + minutes
+  }
+
+  let now = hour + ":" + minutes;
+
+
+
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyBGFv-DFgtKSihzBxuGJacM6L2bey50w8E",
+    authDomain: "gs-chat-0228-a6f12.firebaseapp.com",
+    databaseURL:"https://gs-chat-0228-a6f12-default-rtdb.firebaseio.com/",
+    projectId: "gs-chat-0228-a6f12",
+    storageBucket: "gs-chat-0228-a6f12.appspot.com",
+    messagingSenderId: "22771181282",
+    appId: "1:22771181282:web:01e9379143064f3df660bb"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  // データベースに接続してデータベースに接続して読み書きできるようにする
+  let ref = firebase.database().ref();
+  // 送信ボタンをクリックしたら
+  // データベースに送信する
+  $(`#send`).on(`click`, function () {
+    const uname = $(`#uname`).val();
+    const text = $(`#text`).val();
+    if (text === `` ) {
+      return false;
+    }
+    const msg = {
+      uname:uname,
+      text:text,
+      now:now
+    };
+    ref.push(msg);
+    scrollToEnd();
+    $(`#text`).val(``);
+  })
+  // データベースに追加された時に
+  // データの更新を行う
+  ref.on(`child_added` , function(data){
+    const v = data.val();//valを使ってデータを取ってくる
+    const k = data.key;//ユニークキーを取得
+    // v = {name:"takagi",text:}
+    const h = `<div class="message_user"><p class="name">${v.uname}</p><div class="message_wrapper"><p class="message">${v.text}</p><p class="time">${v.now}</p></div></div>`;
+    $(`#output`).append(h);
+
+    const messagePerson = $(`input[name="person"]:checked`).val();
+
+if(messagePerson === `user2`){
+  $(`.message_user:last`).addClass(`message_user1`)
+}else{
+  $(`.message_user:last`).addClass(`message_user2`)
+  $(`.message_wrapper:last`).addClass(`flex_row`)
+}
+})
+
+
+
+  $(`#text`).on(`keydown`, function(e){
+    if (e.keyCode === 13) {
+    const uname = $(`#uname`).val();
+    const text = $(`#text`).val();
+    if (text === `` ) {
+      return false;
+    }
+    const msg = {
+      uname:uname,
+      text:text,
+      now:now
+    };
+    ref.push(msg);
+    $(`#text`).val(``);
+    scrollToEnd();
+    }
+  });
+
+
+
+  //
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

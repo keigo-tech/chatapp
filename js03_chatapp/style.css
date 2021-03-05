@@ -1,0 +1,147 @@
+body{
+  width: 1365px;
+  text-align: center;
+}
+
+.line{
+  width: 300px;
+  margin: 30px auto;
+}
+
+.yourname{
+  position: relative;
+	width: 80%;
+  margin: 40px 3%;
+}
+
+.yourname input[type='text'] {
+	font: 15px/24px sans-serif;
+	box-sizing: border-box;
+	width: 100%;
+	padding: 0.3em;
+	transition: 0.3s;
+	letter-spacing: 1px;
+	color: #aaaaaa;
+	border: none;
+	border-bottom: 2px solid #1b2538;
+	background: transparent;
+}
+.ef input[type='text']:focus {
+	border-bottom: 2px solid #da3c41;
+	outline: none;
+}
+
+.output{
+  margin: 20px auto 0;
+  text-align: left;
+  height: 80vh;
+  background-color: lightskyblue;
+}
+
+.input{
+  display: flex;
+  justify-content: center;
+  /* width: 500px; */
+}
+
+.text{
+  width: 80%;
+}
+
+.send{
+  width: 20%;
+}
+
+.fa-paper-plane{
+  font-size: 16px;
+}
+
+p{
+  margin-right:5px;
+  margin-left: 5px;
+}
+
+.name{
+  font-size: 10px;
+  margin-bottom: 0;
+  margin-left: 10px;
+}
+
+.message{
+  max-width: 200px;
+  background-color: #fff;
+  padding: 5px 10px;
+  font-weight: bold;
+  font-size: 12px;
+  margin-top: 0;
+  margin-bottom: 0;
+  border-radius: 20px;
+  flex: 1;
+  overflow-wrap: break-word;
+}
+
+.time{
+  font-size: 10px;
+  margin-top:0;
+  margin-bottom: 0;
+}
+
+.message_wrapper{
+  display: flex;
+  margin-bottom: 20px;
+  align-items:flex-end;
+}
+
+.flex_row{
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+
+.user_choice{
+  display: flex;
+  margin: 5px 0;
+}
+
+.user_choice input{
+  display: none;
+}
+
+.user_choice label{
+  display: block;
+  cursor: pointer;
+  width: 60px;
+  font-size: 13px;
+  text-align: center;
+  padding: 10px;
+  background: rgb(161, 140, 114);
+  color: #fff;
+}
+
+.user_choice input[type="radio"]:checked + label {
+  background: darkorange;
+}
+
+.message_user2 .name{
+  text-align: right;
+  margin-right: 0;
+}
+
+.message_user2 .message_wrapper{
+  position: relative;
+  left: 30px;
+}
+
+.message_user1 .time{
+  margin-left: 10px;
+}
+
+.message_user2 .time{
+  margin-left: 10px;
+
+}
+
+.message_user2 .message{
+  background-color: lawngreen;
+
+}
